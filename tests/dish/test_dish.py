@@ -1,6 +1,6 @@
 import pytest
 from src.models.dish import Dish  # noqa: F401, E261, E501
-from src.models.ingredient import Ingredient
+from src.models.ingredient import Ingredient, Restriction
 
 
 def test_dish():
@@ -23,3 +23,10 @@ def test_dish():
     assert repr(dish_pizza) == "Dish('pizza', R$50.00)"
 
     assert dish_pizza == dish_pizzaa
+
+    dish_pizza.add_ingredient_dependency(Ingredient("farinha"), 10)
+
+    assert dish_pizza.recipe == {Ingredient("farinha"): 10}
+    assert dish_pizza.get_ingredients() == {Ingredient("farinha")}
+    assert dish_pizza.get_ingredients() != {Ingredient("ovo")}
+    assert dish_pizza.get_restrictions() == {Restriction.GLUTEN}
